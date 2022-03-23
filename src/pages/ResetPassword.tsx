@@ -11,12 +11,12 @@ const ResetPassword = (): JSX.Element => {
     const {token} = useParams();
 
     const [alerta, setAlerta] = useState<IAlert>({type: '', messageList: []});
-    const [isCargando, setIsCargando] = useState(true);
     const [password, setPassword] = useState('');
+    const [isCargando, setIsCargando] = useState(true);
     const [isValidado, setIsValidado] = useState(false);
     const [isActualizado, setIsActualizado] = useState(false);
 
-    useEffect(() => {
+    useEffect((): void => {
         const validarTokenReseteo = async (): Promise<void> => {
             try {
                 const {data: {msg}} = await AxiosClient.get(`/auth/reset-password/${token}`);
@@ -103,15 +103,16 @@ const ResetPassword = (): JSX.Element => {
                         px-6 py-4 w-full md:w-auto rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold uppercase" 
                         type="submit" value="Obtener Código"/>
                 </form>
-            : InfoMsg({
-                tipo: 'info',
-                titulo: 'Recuperación Exitosa',
-                razon: alerta.messageList[0],
-                links: [
-                    {
-                        url: '/',
-                        descripcion: 'Ya puede iniciar sesión'
-                    }
+            : 
+                InfoMsg({
+                    tipo: 'info',
+                    titulo: 'Recuperación Exitosa',
+                    razon: alerta.messageList[0],
+                    links: [
+                        {
+                            url: '/',
+                            descripcion: 'Ya puede iniciar sesión'
+                        }
                 ]
             }) 
         }
