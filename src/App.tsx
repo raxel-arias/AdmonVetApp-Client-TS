@@ -20,23 +20,23 @@ const App = (): JSX.Element => {
   return (
     <Router>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<AuthLayout />}>
-            <Route index element={<Login />}/>
-            <Route path="/signup" element={<SignUp />}/>
-            <Route path="/confirm/:token" element={<Confirm/>}/>
-            <Route path="/recover-account" element={<RecoverAccount/>}/>
-            <Route path="/reset-password/:token" element={<ResetPassword/>}/>
-          </Route>
-
-          <PacientesProvider>
-            <Route path="/me" element={<SessionLayout />}>
-              <Route index element={<AdmonVet />}/>
-              <Route path="/me/profile" element={<Profile />}/>
-              <Route path="/me/citas" element={<Citas />}/>
+        <PacientesProvider>
+          <Routes>
+            <Route path="/" element={<AuthLayout />}>
+              <Route index element={<Login />}/>
+              <Route path="/signup" element={<SignUp />}/>
+              <Route path="/confirm/:token" element={<Confirm/>}/>
+              <Route path="/recover-account" element={<RecoverAccount/>}/>
+              <Route path="/reset-password/:token" element={<ResetPassword/>}/>
             </Route>
-          </PacientesProvider>
-        </Routes>
+
+            <Route path="/me" element={<SessionLayout />}>
+                <Route index element={<AdmonVet />}/>
+                <Route path="/me/profile" element={<Profile />}/>
+                <Route path="/me/citas" element={<Citas />}/>
+            </Route>
+          </Routes>
+        </PacientesProvider>
       </AuthProvider>
     </Router>
   );
