@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import AxiosClient from "../config/axios.config";
-import PageTitle from "../components/auth/PageTitle";
-import Alert, { IAlert } from './../components/Alert';
+import AxiosClient from "../../config/axios.config";
+import PageTitle from "../../components/auth/PageTitle";
+import Alert, { IAlert } from '../../components/Alert';
 
 const RecoverAccount = (): JSX.Element => {
     const [email, setEmail] = useState('');
@@ -10,7 +10,6 @@ const RecoverAccount = (): JSX.Element => {
         type: '',
         messageList: []
     });
-
     const recoverAccount = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault();
 

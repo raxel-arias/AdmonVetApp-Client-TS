@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from "react-router-dom";
-import AxiosClient from '../config/axios.config';
-import PageTitle from "../components/auth/PageTitle";
-import Alert, { IAlert } from './../components/Alert';
-import InfoMsg from '../components/InfoMsg';
+
+import AxiosClient from '../../config/axios.config';
+
+import PageTitle from "../../components/auth/PageTitle";
+import Alert, { IAlert } from '../../components/Alert';
+import InfoMsg from '../../components/InfoMsg';
 
 const Confirm = (): JSX.Element => {
     const [alerta, setAlerta] = useState<IAlert>({

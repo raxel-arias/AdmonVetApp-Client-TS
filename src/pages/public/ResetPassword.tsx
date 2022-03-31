@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import AxiosClient from "../config/axios.config";
+import AxiosClient from "../../config/axios.config";
 
-import PageTitle from "../components/auth/PageTitle";
-import InfoMsg from "../components/InfoMsg";
-import Alert from "./../components/Alert";
-import { IAlert } from './../components/Alert';
+import PageTitle from "../../components/auth/PageTitle";
+import InfoMsg from "../../components/InfoMsg";
+import Alert from "../../components/Alert";
+import { IAlert } from '../../components/Alert';
 
 const ResetPassword = (): JSX.Element => {
     const {token} = useParams();
@@ -61,7 +61,7 @@ const ResetPassword = (): JSX.Element => {
         setIsCargando(true);
         try {
             const {data: {msg}} = await AxiosClient.post(`/auth/reset-password/${token}`, {password});
-            console.log(token);
+
             setIsActualizado(true);
 
             setAlerta({
@@ -70,6 +70,8 @@ const ResetPassword = (): JSX.Element => {
             });
         } catch (error: any) {
             const {response: {data: {msg}}} = error;
+            setIsValidado(false);
+            setIsActualizado(false);
             setAlerta({
                 type: 'error',
                 messageList: [msg]

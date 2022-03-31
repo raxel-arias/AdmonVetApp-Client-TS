@@ -7,7 +7,7 @@ const InfoMsg = ({tipo, titulo, razon, links}: IMensajeAlerta): JSX.Element => {
 
     let Links: JSX.Element[] = []; 
     links.forEach((link, index) => {
-        Links.push(<Link to={link.url} className="hover:text-rose-700 hover:underline">{link.descripcion}</Link>);
+        Links.push(<Link to={link.url} key={index} className="hover:text-rose-700 hover:underline">{link.descripcion}</Link>);
         if (index < links.length-1) {
             Links.push(<p className='text-center'>ó</p>)
         }

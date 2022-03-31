@@ -1,24 +1,43 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
-import AuthLayout from "./layout/AuthLayout";
 
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Confirm from './pages/Confirm';
-import RecoverAccount from './pages/RecoverAccount';
-import ResetPassword from "./pages/ResetPassword";
+import { AuthProvider } from './contexts/AuthProvider';
+import { PacientesProvider } from './contexts/PacientesProvider';
+
+import AuthLayout from "./layout/AuthLayout";
+import SessionLayout from "./layout/SessionLayout";
+
+import Login from "./pages/public/Login";
+import SignUp from "./pages/public/SignUp";
+import Confirm from './pages/public/Confirm';
+import RecoverAccount from './pages/public/RecoverAccount';
+import ResetPassword from "./pages/public/ResetPassword";
+
+import AdmonVet from "./pages/private/AdmonVet";
+import Profile from "./pages/private/Profile";
+import Citas from "./pages/private/Citas";
 
 const App = (): JSX.Element => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<AuthLayout />}>
-          <Route index element={<Login />}/>
-          <Route path="/signup" element={<SignUp />}/>
-          <Route path="/confirm/:token" element={<Confirm/>}/>
-          <Route path="/recover-account" element={<RecoverAccount/>}/>
-          <Route path="/reset-password/:token" element={<ResetPassword/>}/>
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<AuthLayout />}>
+            <Route index element={<Login />}/>
+            <Route path="/signup" element={<SignUp />}/>
+            <Route path="/confirm/:token" element={<Confirm/>}/>
+            <Route path="/recover-account" element={<RecoverAccount/>}/>
+            <Route path="/reset-password/:token" element={<ResetPassword/>}/>
+          </Route>
+
+          <PacientesProvider>
+            <Route path="/me" element={<SessionLayout />}>
+              <Route index element={<AdmonVet />}/>
+              <Route path="/me/profile" element={<Profile />}/>
+              <Route path="/me/citas" element={<Citas />}/>
+            </Route>
+          </PacientesProvider>
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }

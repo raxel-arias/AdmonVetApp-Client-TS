@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import AxiosClient from "../config/axios.config";
-import { UsuarioSignUp } from './../interfaces/usuario.interface';
-import Alert, {IAlert} from './../components/Alert';
-import PageTitle from './../components/auth/PageTitle';
+import AxiosClient from "../../config/axios.config";
+import { UsuarioSignUp } from '../../interfaces/usuario.interface';
+import Alert, {IAlert} from '../../components/Alert';
+import PageTitle from '../../components/auth/PageTitle';
 
 const SignUp = (): JSX.Element => {
     const [usuario, setUsuario] = useState<UsuarioSignUp>({
