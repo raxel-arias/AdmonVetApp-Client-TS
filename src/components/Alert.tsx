@@ -1,4 +1,4 @@
-const Alert = ({type, messageList, isMostrando}: IAlert): JSX.Element => {
+const Alert = ({type, messageList}: IAlert): JSX.Element => {
 
     const alertClasses: string = `
         fixed top-5 left-0 right-0 text-center 
@@ -22,8 +22,7 @@ const Alert = ({type, messageList, isMostrando}: IAlert): JSX.Element => {
 
 export interface IAlert {
     type: string,
-    messageList: string[],
-    isMostrando: boolean
+    messageList: string[]
 }
 
 export default Alert;

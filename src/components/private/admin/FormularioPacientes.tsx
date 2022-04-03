@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import AxiosClient from '../../../config/axios.config';
+
 import useAuth from './../../../hooks/useAuth';
-import Alert from '../../Alert';
+import usePacientes from '../../../hooks/usePacientes';
+
+import Alert, {IAlert} from '../../Alert';
+
 import { PacienteNuevo } from './../../../interfaces/paciente.interface';
-import { IAlert } from './../../Alert';
 
 const FormularioPacientes = (): JSX.Element => {
-    const {auth: {user}} = useAuth();
+    const {auth: {user, jwt}} = useAuth();
+    const {nuevoPaciente} = usePacientes();
     const [alerta, setAlerta] = useState<IAlert>({
         type: '',
-        isMostrando: false,
         messageList: []
     });
     const [mostrar, setMostrar] = useState<boolean>(false);
@@ -30,8 +33,7 @@ const FormularioPacientes = (): JSX.Element => {
         if (Object.values(paciente).some(val => !val)) {
             setAlerta({
                 type: 'error',
-                messageList: ['Campos vacíos'],
-                isMostrando: true
+                messageList: ['Campos vacíos']
             });
             return;
         }
@@ -39,27 +41,43 @@ const FormularioPacientes = (): JSX.Element => {
         if (Object.values(paciente['propietario']).some(val => !val)) {
             setAlerta({
                 type: 'error',
-                messageList: ['Campos del propietario vacíos'],
-                isMostrando: true
+                messageList: ['Campos del propietario vacíos']
             });
             return;
         }
 
         setAlerta({
             type: '',
-            messageList: [],
-            isMostrando: false
+            messageList: []
         });
 
-        return;
-
         try {
-            const response = await AxiosClient.post('/pacientes/nuevo', paciente);
+            const {data: {msg}} = await nuevoPaciente(paciente);
+            
+            setAlerta({
+                type: 'info',
+                messageList: [msg]
+            });
 
-            console.log(response.data);
+            setPaciente({
+                nombre: '',
+                sintomas: '',
+                fechaAlta: '',
+                propietario: {
+                    nombre: '',
+                    apellido: '',
+                    email: ''
+                }
+            });
         } catch (error: any) {
-            console.log(error.response);
+            const {response: {data: {msg}}} = error;
+
+            setAlerta({
+                type: 'error',
+                messageList: [msg]
+            })
         }
+
     }
 
     return (
@@ -93,12 +111,12 @@ const FormularioPacientes = (): JSX.Element => {
                 </div>
                 <div>
                     <label className="uppercase text-gray-600 block text-xl font-bold mt-2.5">
-                        Fecha de Alta
+                        Fecha y Hora de Alta
                     </label>
                     <input 
                         className="inputs border w-full p-3 mt-3 bg-gray-200"
-                        type="date" 
-                        placeholder="Fecha" 
+                        type="datetime-local" 
+                        placeholder="Fecha y Hora" 
                         value={paciente.fechaAlta}
                         onChange={ev => setPaciente({...paciente, fechaAlta: ev.target.value})}
                     />

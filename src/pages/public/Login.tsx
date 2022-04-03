@@ -18,8 +18,7 @@ const Login = (): JSX.Element => {
     });
     const [alerta, setAlerta] = useState<IAlert>({
         messageList: [],
-        type: '',
-        isMostrando: false
+        type: ''
     });
     const navigate = useNavigate();
     const {auth, setAuth, isCargando} = useAuth();
@@ -30,8 +29,7 @@ const Login = (): JSX.Element => {
         if (!usuario.email || !usuario.password) {
             setAlerta({
                 type: 'error',
-                messageList: ['Campos Vacíos'],
-                isMostrando: true
+                messageList: ['Campos Vacíos']
             });
             return;
         }
@@ -60,8 +58,7 @@ const Login = (): JSX.Element => {
 
             setAlerta({
                 type: 'error',
-                messageList: [msg],
-                isMostrando: true
+                messageList: [msg]
             });
         }
     }
