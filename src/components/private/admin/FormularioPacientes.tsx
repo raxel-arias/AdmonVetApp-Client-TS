@@ -10,7 +10,7 @@ import { PacienteNuevo } from './../../../interfaces/paciente.interface';
 
 const FormularioPacientes = (): JSX.Element => {
     const {auth: {user, jwt}} = useAuth();
-    const {nuevoPaciente} = usePacientes();
+    const {nuevoPaciente, setPacientes, pacientes} = usePacientes();
     const [alerta, setAlerta] = useState<IAlert>({
         type: '',
         messageList: []
@@ -52,7 +52,7 @@ const FormularioPacientes = (): JSX.Element => {
         });
 
         try {
-            const {data: {msg}} = await nuevoPaciente(paciente);
+            const {data: {msg, data: {pacienteAgregado}}} = await nuevoPaciente(paciente);
             
             setAlerta({
                 type: 'info',
@@ -69,15 +69,15 @@ const FormularioPacientes = (): JSX.Element => {
                     email: ''
                 }
             });
+
+            setPacientes([...pacientes, pacienteAgregado]);
         } catch (error: any) {
             const {response: {data: {msg}}} = error;
-
             setAlerta({
                 type: 'error',
                 messageList: [msg]
-            })
+            });
         }
-
     }
 
     return (

@@ -22,6 +22,10 @@ export const PacientesProvider: React.FC<React.ReactNode> = ({children}) => {
 
     const [pacientes, setPacientes] = useState<IPaciente[]>(pacientesContextDefault.pacientes);
 
+    useEffect(() => {
+        listadoPacientes();
+    }, []);
+
     const nuevoPaciente = (paciente: IPaciente): Promise<any> => {
         return new Promise(async (resolve, reject) => {
             try {
@@ -39,6 +43,20 @@ export const PacientesProvider: React.FC<React.ReactNode> = ({children}) => {
         });
     }
 
+    const listadoPacientes = async (): Promise<any> => {
+        try {
+            const {data: {data: {listadoPacientes}}} = await AxiosClient.get('/pacientes', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${auth.jwt}`
+                }
+            });
+            console.log(listadoPacientes);
+            setPacientes(listadoPacientes);
+        } catch (error) {
+            console.error('Hubo un error: ', {errorDetails: error});
+        }
+    }
     return (
         <PacientesContext.Provider
             value={
