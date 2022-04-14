@@ -1,6 +1,5 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.css';
 
 import HeaderLogo from "./HeaderLogo";
 import useAuth from './../../hooks/useAuth';
@@ -10,10 +9,9 @@ const Header = (): JSX.Element => {
     const location = useLocation();
     
     const salir = (): void => {
-        Swal
-        .fire({
+        Swal.fire({
             title: "Cerrar Sesión",
-            text: "¿Deseas Salir?",
+            text: "¿Desea Salir?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: "Sí",

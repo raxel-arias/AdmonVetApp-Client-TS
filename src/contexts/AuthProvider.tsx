@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext } from "react";
+import { useLocation } from "react-router-dom";
 import AxiosClient from "../config/axios.config";
 import { UsuarioProfile } from "../interfaces/usuario.interface";
 
@@ -12,7 +13,8 @@ interface IAuthContext {
     setAuth: React.Dispatch<React.SetStateAction<IAuth>>,
     isCargando: boolean,
     setIsCargando: React.Dispatch<React.SetStateAction<boolean>>,
-    cerrarSesion: () => void
+    cerrarSesion: () => void,
+    actualizarInfo: (user: UsuarioProfile) => Promise<any>
 }
 
 const authContextDefault: IAuthContext = {
@@ -29,7 +31,8 @@ const authContextDefault: IAuthContext = {
     setAuth: auth => {},
     isCargando: true,
     setIsCargando: flag => {},
-    cerrarSesion: () => {}
+    cerrarSesion: () => {},
+    actualizarInfo: async () => {}
 }
 
 const AuthContext = createContext(authContextDefault);
@@ -38,19 +41,20 @@ export const AuthProvider: React.FC<React.ReactNode> = ({children}) => {
     const [auth, setAuth] = useState<IAuth>(authContextDefault.auth);
     const [isCargando, setIsCargando] = useState<boolean>(authContextDefault.isCargando);
     
+    const location = useLocation();
+
     useEffect(() => {
         authentication();
-    }, []); 
+    }, [location]); 
     
     const authentication = async (): Promise<void> => {
-        console.log('llamando al authentication');
         const jwt: string | null = localStorage.getItem('admonvetapp_jwt');
 
         if (!jwt) {
             setIsCargando(false);
             return;
         }
-
+        
         try {
             const {data: {data: {usuario}}} = await AxiosClient.get('/user/', {
                 headers: {
@@ -71,13 +75,46 @@ export const AuthProvider: React.FC<React.ReactNode> = ({children}) => {
             });
         } catch (error: any) {
             setAuth(authContextDefault.auth);
+        } finally {
+            setIsCargando(false);
         }
-        setIsCargando(false);
     }
 
     const cerrarSesion = (): void => {
         localStorage.removeItem('admonvetapp_jwt')
         setAuth(authContextDefault.auth);
+    }
+    
+    const actualizarInfo = (user: UsuarioProfile): Promise<any> => {
+        return new Promise (async (resolve, reject) => {
+            const jwt: string | null = localStorage.getItem('admonvetapp_jwt');
+
+            try {
+                const response: any = await AxiosClient.put('/user/actualizar', user, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${jwt}`
+                    }
+                });
+
+                const {data: {data: {usuarioUpdated}}} = response;
+
+                setAuth({
+                    ...auth,
+                    user: {
+                        id: usuarioUpdated._id,
+                        nombre: usuarioUpdated.nombre,
+                        apellido: usuarioUpdated.apellido,
+                        email: usuarioUpdated.email,
+                        ...(usuarioUpdated.telefono && {telefono: usuarioUpdated.telefono})
+                    }
+                });
+
+                resolve(response);
+            } catch (error: any) {
+                reject(error);
+            }
+        });
     }
 
 
@@ -89,7 +126,8 @@ export const AuthProvider: React.FC<React.ReactNode> = ({children}) => {
                     setAuth,
                     isCargando,
                     setIsCargando,
-                    cerrarSesion
+                    cerrarSesion,
+                    actualizarInfo
                 }
             }
         >

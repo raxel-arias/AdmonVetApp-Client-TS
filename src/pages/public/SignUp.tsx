@@ -55,7 +55,6 @@ const SignUp = (): JSX.Element => {
         let {confirmarPassword, ...usuarioRegistro} = usuario; 
     
         (async () => {
-            console.log(usuarioRegistro);
             try {
                 const {data:{msg, data:{ alertaToken}}} = await AxiosClient.post(`/auth/signup`, usuarioRegistro);
 

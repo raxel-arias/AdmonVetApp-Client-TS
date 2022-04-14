@@ -53,7 +53,6 @@ const Login = (): JSX.Element => {
 
             navigate('/me', {replace: true});
         } catch (error: any) {
-            console.log(error);
             const {response: {data: {msg}}} = error;
 
             setAlerta({

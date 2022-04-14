@@ -1,22 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AxiosClient from '../../../config/axios.config';
+
+import moment from 'moment';
 
 import useAuth from './../../../hooks/useAuth';
 import usePacientes from '../../../hooks/usePacientes';
 
 import Alert, {IAlert} from '../../Alert';
 
-import { PacienteNuevo } from './../../../interfaces/paciente.interface';
+import { IPaciente } from './../../../interfaces/paciente.interface';
 
 const FormularioPacientes = (): JSX.Element => {
     const {auth: {user, jwt}} = useAuth();
-    const {nuevoPaciente, setPacientes, pacientes} = usePacientes();
+    const {nuevoPaciente, pacientes, setPacientes, pacienteEdicion, setPacienteEdicion, actualizarPaciente} = usePacientes();
     const [alerta, setAlerta] = useState<IAlert>({
         type: '',
         messageList: []
     });
+    const [isEditando, setIsEditando] = useState<boolean>(false);
     const [mostrar, setMostrar] = useState<boolean>(false);
-    const [paciente, setPaciente] = useState<PacienteNuevo>({
+    const [paciente, setPaciente] = useState<IPaciente>({
         nombre: '',
         sintomas: '',
         fechaAlta: '',
@@ -26,6 +29,29 @@ const FormularioPacientes = (): JSX.Element => {
             email: ''
         }
     });
+
+    useEffect(() => {
+        (() => {
+            if (pacienteEdicion._id) {
+                setMostrar(true);
+                setPaciente(pacienteEdicion);
+                setIsEditando(true);
+            } else {
+                setMostrar(false);
+                setPaciente({
+                    nombre: '',
+                    sintomas: '',
+                    fechaAlta: '',
+                    propietario: {
+                        nombre: '',
+                        apellido: '',
+                        email: ''
+                    }
+                });
+                setIsEditando(false);
+            }
+        })();
+    }, [pacienteEdicion]);
 
     const handleSubmit = async (ev: React.FormEvent): Promise<void> => {
         ev.preventDefault();
@@ -52,14 +78,38 @@ const FormularioPacientes = (): JSX.Element => {
         });
 
         try {
-            const {data: {msg, data: {pacienteAgregado}}} = await nuevoPaciente(paciente);
-            
+            if (!isEditando) {
+                const {data: {msg, data: {pacienteAgregado}}} = await nuevoPaciente(paciente);
+                
+                setAlerta({
+                    type: 'info',
+                    messageList: [msg]
+                });
+    
+                setPaciente({
+                    nombre: '',
+                    sintomas: '',
+                    fechaAlta: '',
+                    propietario: {
+                        nombre: '',
+                        apellido: '',
+                        email: ''
+                    }
+                });
+
+                setPacientes([...pacientes, pacienteAgregado]);
+                
+                return;
+            }
+
+            const {data: {msg, data: {pacienteActualizado}}} = await actualizarPaciente(paciente);
+
             setAlerta({
                 type: 'info',
                 messageList: [msg]
             });
 
-            setPaciente({
+            setPacienteEdicion({
                 nombre: '',
                 sintomas: '',
                 fechaAlta: '',
@@ -69,8 +119,6 @@ const FormularioPacientes = (): JSX.Element => {
                     email: ''
                 }
             });
-
-            setPacientes([...pacientes, pacienteAgregado]);
         } catch (error: any) {
             const {response: {data: {msg}}} = error;
             setAlerta({
@@ -78,8 +126,11 @@ const FormularioPacientes = (): JSX.Element => {
                 messageList: [msg]
             });
         }
-    }
 
+        setTimeout(() => {
+            setAlerta({type: '', messageList: []});
+        }, 1500);
+    }
     return (
         <>
             <div className='md:hidden'>
@@ -93,7 +144,7 @@ const FormularioPacientes = (): JSX.Element => {
             
             {alerta.type && <Alert {...alerta}/>}
 
-            <form className={`${mostrar ? 'block' : 'hidden'} md:block p-5 mx-auto md:shadow-2xl rounded-2xl fade`}
+            <form className={`${mostrar || pacienteEdicion._id ? 'block' : 'hidden'} md:block p-5 mx-auto md:shadow-2xl rounded-2xl fade`}
                 onSubmit={handleSubmit}
                 >
                 <div>
@@ -117,7 +168,7 @@ const FormularioPacientes = (): JSX.Element => {
                         className="inputs border w-full p-3 mt-3 bg-gray-200"
                         type="datetime-local" 
                         placeholder="Fecha y Hora" 
-                        value={paciente.fechaAlta}
+                        value={moment(paciente.fechaAlta).format('YYYY-MM-DDTHH:mm:ss')}
                         onChange={ev => setPaciente({...paciente, fechaAlta: ev.target.value})}
                     />
                     <div className="inputs-border-bottom"></div>
@@ -182,7 +233,7 @@ const FormularioPacientes = (): JSX.Element => {
                     <input 
                         className="button my-5 px-6 py-4 w-full rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold uppercase" 
                         type="submit" 
-                        value="Agregar"/>
+                        value={isEditando ? 'Actualizar' : 'Crear'}/>
                 </div>
             </form>
         </>

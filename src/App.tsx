@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthProvider';
 import { PacientesProvider } from './contexts/PacientesProvider';
 
+import 'sweetalert2/dist/sweetalert2.css';
+
 import AuthLayout from "./layout/AuthLayout";
 import SessionLayout from "./layout/SessionLayout";
 

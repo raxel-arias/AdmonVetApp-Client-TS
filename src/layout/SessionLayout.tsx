@@ -12,7 +12,7 @@ const SessionLayout = (): JSX.Element => {
     const {auth, isCargando} = useAuth();
     
     if (isCargando) return <Spinner />
-
+    
     if (!auth.user.id) return <Navigate to="/" replace />
 
     return (

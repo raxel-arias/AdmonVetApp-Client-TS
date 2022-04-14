@@ -1,9 +1,11 @@
 export interface UsuarioProfile {
-    id: string,
-    nombre: string,
-    apellido: string,
+    id?: string,
+    nombre?: string,
+    apellido?: string,
     telefono?: string,
-    email: string
+    email?: string,
+    previousPassword?: string
+    password?: string
 }
 
 export interface UsuarioSignUp {

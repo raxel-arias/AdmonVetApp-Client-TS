@@ -1,7 +1,9 @@
 import FormularioPacientes from "../../components/private/admin/FormularioPacientes";
 import ListadoPacientes from "../../components/private/admin/ListadoPacientes";
+import usePacientes from './../../hooks/usePacientes';
 
 const Citas = (): JSX.Element => {
+
     return (
         <>
         <div className="flex flex-col md:flex-row">
