@@ -1,4 +1,3 @@
-import moment from "moment";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import usePacientes from "../../../hooks/usePacientes";
@@ -64,27 +63,29 @@ const Paciente = (paciente: IPaciente): JSX.Element => {
     return (
         <>
         {alerta?.type ? <Alert {...alerta} /> : ''}
-        <div className="my-2 mx-5 p-4 shadow-lg">
-            <p className="uppercase">Nombre: <span className="font-bold">{nombre}</span></p>
-            <p className="uppercase">Cita: <span className="font-bold text-rose-500">{formatearFecha(fechaAlta)}</span></p>
-            <p className="uppercase">Propietario: <span className="font-bold">{propietario.nombre + ' ' + propietario.apellido}</span></p>
+        <div className="my-2 mx-5 p-4 shadow-lg md:flex md:justify-between">
+           <div className="md:w-2/5 xl:w-3/5">
+                <p className="uppercase">Nombre: <span className="font-bold">{nombre}</span></p>
+                <p className="uppercase">Cita: <span className="font-bold text-rose-500">{formatearFecha(fechaAlta)}</span></p>
+                <p className="uppercase">Propietario: <span className="font-bold">{propietario.nombre + ' ' + propietario.apellido}</span></p>
+           </div>
         
-            <div className="flex justify-evenly my-2">
+            <div className="flex md:w-2/5 gap-2 justify-evenly my-2">
                 <button 
                     type="button" 
-                    className="py-2 px-6 bg-yellow-500 hover:bg-yellow-600 text-white uppercase rounded-xl"
+                    className="w-1/3 py-2 px-1 bg-yellow-500 hover:bg-yellow-600 text-white uppercase rounded-xl"
                     onClick={() => {setPacienteEdicion(pacienteEditar)}}>
                     Editar
                 </button>
                 <button 
                     type="button" 
-                    className="py-2 px-6 bg-red-500 hover:bg-red-600 text-white uppercase rounded-xl"
+                    className="w-1/3 py-2 px-1 bg-red-500 hover:bg-red-600 text-white uppercase rounded-xl"
                     onClick={() => {eliminar(_id!)}}>
                     Eliminar
                 </button>
                 <button
                     type="button"
-                    className={`py-2 px-6 ${paciente.pendiente ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-500 hover:bg-blue-600'} text-white uppercase rounded-xl`}
+                    className={`w-1/3 py-2 px-1 ${paciente.pendiente ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-500 hover:bg-blue-600'} text-white uppercase rounded-xl`}
                     onClick={() => {actualizarEstadoPaciente(_id!)}}
                 >
                     {paciente.pendiente ? 'Pendiente' : 'Finalizado'}

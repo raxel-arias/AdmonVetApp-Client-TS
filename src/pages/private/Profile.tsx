@@ -43,7 +43,7 @@ const Profile = (): JSX.Element => {
                     ''
             }
 
-            <div className='p-10 rounded-xl shadow-xl md:w-3/4 md:px-32 mx-auto'>
+            <div className='p-10 rounded-xl md:shadow-xl md:w-3/4 md:px-32 mx-auto'>
                 <h3 className='text-center uppercase text-gray-600 mb-2.5 text-2xl'>Información Personal</h3>
                 <button 
                     className='block mx-auto w-full md:w-1/2 uppercase px-8 py-4 bg-green-500 hover:bg-green-600 rounded-xl text-white'
@@ -53,7 +53,7 @@ const Profile = (): JSX.Element => {
                 </button>
             </div>
 
-            <div className='p-10 rounded-xl shadow-xl md:w-3/4 md:px-32 mx-auto'>
+            <div className='p-10 rounded-xl md:shadow-xl md:w-3/4 md:px-32 mx-auto'>
                 <h3 className='text-center uppercase text-gray-600 mb-2.5 text-2xl'>Seguridad</h3>
                 <div className='md:flex gap-2'>
                     <button 
